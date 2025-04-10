@@ -1,0 +1,7 @@
+.vscode
+bin
+build/bin
+frontend/node_modules
+frontend/dist
+vendor
+.gitignore

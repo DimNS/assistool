@@ -1,0 +1,15 @@
+project_name: assistool
+builds:
+  - id: assistool
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - windows
+    goarch:
+      - amd64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+    main: ./main
+    binary: ./bin/assistool

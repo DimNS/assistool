@@ -1,0 +1,83 @@
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+        'Droid Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 300;
+    src: url('assets/fonts/SegoeUILight.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 400;
+    src: url('assets/fonts/SegoeUIRegular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI SemiBold';
+    font-style: normal;
+    font-weight: 500;
+    src: url('assets/fonts/SegoeUISemiBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: normal;
+    font-weight: 700;
+    src: url('assets/fonts/SegoeUIBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-style: italic;
+    font-weight: 400;
+    src: url('assets/fonts/SegoeUIItalic.woff') format('woff');
+}
+
+/* #svelte-toast color scheme */
+.toast-item {
+    --toastMsgPadding: 1rem;
+    --toastPadding: 0 0.5rem 0 0;
+    --toastBorderRadius: 0.25rem;
+}
+
+.toast-success {
+    --toastBackground: #16ae71;
+    --toastColor: white;
+    --toastBarBackground: #0c6340; /* -5 0to255.com */
+}
+
+.toast-danger {
+    --toastBackground: #fb1c3c;
+    --toastColor: white;
+    --toastBarBackground: #bf031e; /* -5 0to255.com */
+}
+
+.toast-warning {
+    --toastBackground: #ecbc64;
+    --toastColor: white;
+    --toastBarBackground: #e09a1b; /* -5 0to255.com */
+}
+
+.toast-info {
+    --toastBackground: #05337b;
+    --toastColor: white;
+    --toastBarBackground: #021129; /* -5 0to255.com */
+}
+/* /svelte-toast color scheme */
+
+#app {
+    height: 100vh;
+}
+
+.mono {
+    font-family: monospace;
+    font-size: 11pt;
+}
