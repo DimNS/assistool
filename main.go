@@ -33,6 +33,6 @@ func main() {
 		},
 	}
 	if err := wails.Run(opts); err != nil {
-		println(fmt.Sprintf("Error starting app: %v\n", err))
+		fmt.Printf("Error starting app: %v\n", err)
 	}
 }

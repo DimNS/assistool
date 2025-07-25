@@ -23,7 +23,7 @@ func (t *GoStructTab) Beautify(gostruct string) (string, error) {
 	return res, nil
 }
 
-func (t *GoStructTab) goStructBeautify(input string) (string, error) { //nolint:gocognit //nolint:gocyclo // it's ok
+func (*GoStructTab) goStructBeautify(input string) (string, error) { //nolint:gocognit,gocyclo,cyclop // it's ok
 	input = strings.TrimSpace(input)
 	if input == "" {
 		return "", nil
@@ -44,60 +44,93 @@ func (t *GoStructTab) goStructBeautify(input string) (string, error) { //nolint:
 	for i := 0; i < len(input); i++ {
 		char := input[i]
 
-		switch {
-		case char == '{':
+		switch char {
+		case '{':
 			// Проверяем пустую структуру {}
 			if i+1 < len(input) && input[i+1] == '}' {
-				result.WriteString("{}")
+				_, err := result.WriteString("{}")
+				if err != nil {
+					return "", fmt.Errorf("write string: %v", err)
+				}
+
 				i++
 				continue
 			}
 
 			stack = append(stack, indentLevel)
 			indentLevel++
-			result.WriteByte(char)
-			result.WriteByte('\n')
-			result.WriteString(strings.Repeat(" ", indentLevel*indentSize))
 
-		case char == '}':
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
+			if err := result.WriteByte('\n'); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
+			if _, err := result.WriteString(strings.Repeat(" ", indentLevel*indentSize)); err != nil {
+				return "", fmt.Errorf("write string: %v", err)
+			}
+
+		case '}':
 			if len(stack) > 0 {
 				indentLevel = stack[len(stack)-1]
 				stack = stack[:len(stack)-1]
 			}
 
-			result.WriteByte('\n')
-			result.WriteString(strings.Repeat(" ", indentLevel*indentSize))
-			result.WriteByte(char)
+			if err := result.WriteByte('\n'); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
+			if _, err := result.WriteString(strings.Repeat(" ", indentLevel*indentSize)); err != nil {
+				return "", fmt.Errorf("write string: %v", err)
+			}
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
 
-		case char == '(':
+		case '(':
 			// Проверяем, не начинается ли это time.Date
 			if i > 4 && strings.HasSuffix(input[:i], "Date") {
 				inDateFunction = true
 			}
 
-			result.WriteByte(char)
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
 
-		case char == ')':
+		case ')':
 			if inDateFunction {
 				inDateFunction = false
 			}
 
-			result.WriteByte(char)
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
 
-		case char == ',':
-			result.WriteByte(char)
+		case ',':
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
 
-			if inDateFunction { //nolint:gocritic // it's ok
+			if inDateFunction { //nolint:gocritic,nestif // it's ok
 				// Для time.Date оставляем запятую с пробелом
-				result.WriteByte(' ')
-			} else if len(stack) > 0 && stack[len(stack)-1] == indentLevel-1 { //nolint:gocritic // it's ok
+				if err := result.WriteByte(' '); err != nil {
+					return "", fmt.Errorf("write byte: %v", err)
+				}
+			} else if len(stack) > 0 && stack[len(stack)-1] == indentLevel-1 { //nolint:gocritic,revive // it's ok
 				// Для вложенных структур делаем перенос
-				result.WriteByte('\n')
-				result.WriteString(strings.Repeat(" ", indentLevel*indentSize))
+				if err := result.WriteByte('\n'); err != nil {
+					return "", fmt.Errorf("write byte: %v", err)
+				}
+				if _, err := result.WriteString(strings.Repeat(" ", indentLevel*indentSize)); err != nil {
+					return "", fmt.Errorf("write string: %v", err)
+				}
 			} else {
 				// Для верхнего уровня делаем перенос
-				result.WriteByte('\n')
-				result.WriteString(strings.Repeat(" ", indentLevel*indentSize))
+				if err := result.WriteByte('\n'); err != nil {
+					return "", fmt.Errorf("write byte: %v", err)
+				}
+				if _, err := result.WriteString(strings.Repeat(" ", indentLevel*indentSize)); err != nil {
+					return "", fmt.Errorf("write string: %v", err)
+				}
 			}
 
 			// Пропускаем пробел после запятой, если он есть
@@ -106,7 +139,9 @@ func (t *GoStructTab) goStructBeautify(input string) (string, error) { //nolint:
 			}
 
 		default:
-			result.WriteByte(char)
+			if err := result.WriteByte(char); err != nil {
+				return "", fmt.Errorf("write byte: %v", err)
+			}
 		}
 	}
 

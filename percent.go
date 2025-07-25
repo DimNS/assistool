@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"strconv"
@@ -21,23 +22,23 @@ func NewPercentTab() *PercentTab {
 
 // Calculate calculates the difference between two numbers.
 func (t *PercentTab) Calculate(input1, input2 string) (string, error) {
-	r, err := t.calculate(input1, input2)
+	r, err := t.computing(input1, input2)
 	if err != nil {
-		return "", fmt.Errorf("calculate: %v", err)
+		return "", fmt.Errorf("computing: %v", err)
 	}
 
 	return fmt.Sprintf("Result: %.2f%%", r), nil
 }
 
-func (t *PercentTab) calculate(s1, s2 string) (float64, error) {
+func (*PercentTab) computing(s1, s2 string) (float64, error) {
 	s1 = strings.TrimSpace(s1)
 	if s1 == "" {
-		return 0, fmt.Errorf("first value is empty")
+		return 0, errors.New("first value is empty")
 	}
 
 	s2 = strings.TrimSpace(s2)
 	if s2 == "" {
-		return 0, fmt.Errorf("second value is empty")
+		return 0, errors.New("second value is empty")
 	}
 
 	s1 = strings.ReplaceAll(s1, ",", ".")

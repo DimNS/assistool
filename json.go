@@ -16,8 +16,8 @@ func NewJSONTab() *JSONTab {
 }
 
 // Beautify beautify json.
-func (t *JSONTab) Beautify(json string, ntconvert bool) (string, error) {
-	res, err := t.jsonBeautify(json, ntconvert)
+func (t *JSONTab) Beautify(jsonString string, ntconvert bool) (string, error) {
+	res, err := t.jsonBeautify(jsonString, ntconvert)
 	if err != nil {
 		return "", fmt.Errorf("json beautify: %v", err)
 	}
@@ -25,7 +25,7 @@ func (t *JSONTab) Beautify(json string, ntconvert bool) (string, error) {
 	return res, nil
 }
 
-func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) {
+func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) { //nolint:revive // it's ok
 	str = strings.TrimSpace(str)
 	if str == "" {
 		return "", nil
@@ -70,7 +70,7 @@ func (t *JSONTab) bypassMap(data map[string]any) map[string]any { //nolint:gocog
 				j := map[string]any{}
 
 				if err := json.NewDecoder(b).Decode(&j); err != nil {
-					println(fmt.Sprintf("Json decode: %v\n", err))
+					fmt.Printf("Json decode: %v\n", err)
 
 					return nil
 				}

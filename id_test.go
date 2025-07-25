@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIDTab_GenerateUUID(t *testing.T) { //nolint:dupl // it's ok
+func TestIDTab_GenerateUUID(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
@@ -55,7 +55,7 @@ func TestIDTab_GenerateUUID(t *testing.T) { //nolint:dupl // it's ok
 	}
 }
 
-func TestIDTab_GenerateULID(t *testing.T) { //nolint:dupl // it's ok
+func TestIDTab_GenerateULID(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
@@ -119,7 +119,7 @@ func Test_newUUID(t *testing.T) {
 			got := newUUID()
 			id, err := uuid.Parse(got)
 			assert.NotNil(t, id)
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 		})
 	}
 }
@@ -141,7 +141,7 @@ func Test_newULID(t *testing.T) {
 			got := newULID()
 			id, err := ulid.Parse(got)
 			assert.NotNil(t, id)
-			assert.Nil(t, err)
+			assert.NoError(t, err)
 		})
 	}
 }

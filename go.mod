@@ -1,6 +1,6 @@
 module assistool
 
-go 1.22.6
+go 1.24.4
 
 require (
 	github.com/google/uuid v1.6.0
@@ -39,5 +39,3 @@ require (
 	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// replace github.com/wailsapp/wails/v2 v2.8.1 => /home/dimnik/.asdf/installs/golang/1.20.1/packages/pkg/mod

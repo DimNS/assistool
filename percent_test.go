@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,7 +39,7 @@ func TestPercentTab_Calculate(t *testing.T) {
 				input2: "20",
 			},
 			want:    "",
-			wantErr: fmt.Errorf("calculate: first value is empty"),
+			wantErr: errors.New("computing: first value is empty"),
 		},
 	}
 	for _, tt := range tests {
@@ -53,7 +53,7 @@ func TestPercentTab_Calculate(t *testing.T) {
 	}
 }
 
-func TestPercentTab_calculate(t *testing.T) {
+func TestPercentTab_computing(t *testing.T) {
 	t.Parallel()
 
 	type args struct {
@@ -85,7 +85,7 @@ func TestPercentTab_calculate(t *testing.T) {
 				s2: "20",
 			},
 			want:    0,
-			wantErr: fmt.Errorf("first value is empty"),
+			wantErr: errors.New("first value is empty"),
 		},
 		{
 			name: "error: second value is empty",
@@ -95,7 +95,7 @@ func TestPercentTab_calculate(t *testing.T) {
 				s2: "",
 			},
 			want:    0,
-			wantErr: fmt.Errorf("second value is empty"),
+			wantErr: errors.New("second value is empty"),
 		},
 		{
 			name: "error: first value is not a number",
@@ -105,7 +105,7 @@ func TestPercentTab_calculate(t *testing.T) {
 				s2: "20",
 			},
 			want:    0,
-			wantErr: fmt.Errorf("first value is not a number: strconv.ParseFloat: parsing \"10a\": invalid syntax"),
+			wantErr: errors.New("first value is not a number: strconv.ParseFloat: parsing \"10a\": invalid syntax"),
 		},
 		{
 			name: "error: second value is not a number",
@@ -115,15 +115,15 @@ func TestPercentTab_calculate(t *testing.T) {
 				s2: "20a",
 			},
 			want:    0,
-			wantErr: fmt.Errorf("second value is not a number: strconv.ParseFloat: parsing \"20a\": invalid syntax"),
+			wantErr: errors.New("second value is not a number: strconv.ParseFloat: parsing \"20a\": invalid syntax"),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := tt.srv.calculate(tt.args.s1, tt.args.s2)
-			assert.Equal(t, tt.want, got)
+			got, err := tt.srv.computing(tt.args.s1, tt.args.s2)
+			assert.InDelta(t, tt.want, got, 0)
 			assert.Equal(t, tt.wantErr, err)
 		})
 	}

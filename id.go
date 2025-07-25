@@ -23,7 +23,7 @@ func NewIDTab() *IDTab {
 }
 
 // GenerateUUID generates a new UUID.
-func (t *IDTab) GenerateUUID(upperCase bool) string {
+func (t *IDTab) GenerateUUID(upperCase bool) string { //nolint:revive // it's ok
 	id := t.uuidFunc()
 
 	if upperCase {
@@ -36,7 +36,7 @@ func (t *IDTab) GenerateUUID(upperCase bool) string {
 }
 
 // GenerateULID generates a new ULID.
-func (t *IDTab) GenerateULID(upperCase bool) string {
+func (t *IDTab) GenerateULID(upperCase bool) string { //nolint:revive // it's ok
 	id := t.ulidFunc()
 
 	if upperCase {
