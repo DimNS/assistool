@@ -21,6 +21,11 @@ jobs:
           go-version-file: go.mod
           cache-dependency-path: go.sum
 
+      - name: Prepare frontend
+        run: |
+          mkdir frontend/dist
+          touch frontend/dist/empty.file
+
       - name: Run linter check
         uses: golangci/golangci-lint-action@v7
         with:
