@@ -25,20 +25,20 @@ func (t *JSONTab) Beautify(jsonString string, ntconvert bool) (string, error) {
 	return res, nil
 }
 
-func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) { //nolint:revive // it's ok
+func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) {
 	str = strings.TrimSpace(str)
 	if str == "" {
 		return "", nil
 	}
 
 	buff := bytes.NewBuffer([]byte(str))
-	data := map[string]any{}
-
+	var data any
 	if err := json.NewDecoder(buff).Decode(&data); err != nil {
 		return "", fmt.Errorf("decode json: %v", err)
 	}
 
-	val, err := json.MarshalIndent(t.bypassMap(data), "", "    ")
+	processedData := t.bypassAny(data)
+	val, err := json.MarshalIndent(processedData, "", "    ")
 	if err != nil {
 		return "", fmt.Errorf("marshal json: %v", err)
 	}
@@ -53,39 +53,47 @@ func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) { //nolint:
 	return res, nil
 }
 
-func (t *JSONTab) bypassMap(data map[string]any) map[string]any { //nolint:gocognit // it's ok
-	res := map[string]any{}
+func (t *JSONTab) bypassAny(data any) any {
+	switch v := data.(type) {
+	case map[string]any:
+		return t.bypassMap(v)
+	case []any:
+		return t.bypassArray(v)
+	case string:
+		if strings.TrimSpace(v) == "" {
+			return v
+		}
+
+		trimmed := strings.TrimSpace(v)
+		if (strings.HasPrefix(trimmed, "{") && strings.HasSuffix(trimmed, "}")) ||
+			(strings.HasPrefix(trimmed, "[") && strings.HasSuffix(trimmed, "]")) {
+			var parsedData any
+			buff := bytes.NewBuffer([]byte(v))
+			if err := json.NewDecoder(buff).Decode(&parsedData); err == nil {
+				return t.bypassAny(parsedData)
+			}
+		}
+		return v
+	default:
+		return v
+	}
+}
+
+func (t *JSONTab) bypassMap(data map[string]any) map[string]any {
+	res := make(map[string]any)
 
 	for k, v := range data {
-		if vv, ok := v.(map[string]any); ok {
-			res[k] = t.bypassMap(vv)
+		res[k] = t.bypassAny(v)
+	}
 
-			continue
-		}
+	return res
+}
 
-		if vv, ok := v.(string); ok {
-			if (strings.HasPrefix(vv, "{") && strings.HasSuffix(vv, "}")) ||
-				strings.HasPrefix(vv, "[") && strings.HasSuffix(vv, "]") {
-				b := bytes.NewBuffer([]byte(vv))
-				j := map[string]any{}
+func (t *JSONTab) bypassArray(data []any) []any {
+	res := make([]any, len(data))
 
-				if err := json.NewDecoder(b).Decode(&j); err != nil {
-					fmt.Printf("Json decode: %v\n", err)
-
-					return nil
-				}
-
-				res[k] = t.bypassMap(j)
-
-				continue
-			}
-
-			res[k] = vv
-
-			continue
-		}
-
-		res[k] = v
+	for i, v := range data {
+		res[i] = t.bypassAny(v)
 	}
 
 	return res

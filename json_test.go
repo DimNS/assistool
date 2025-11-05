@@ -111,6 +111,25 @@ func1
 }`,
 			wantErr: nil,
 		},
+		{
+			name: "json string",
+			srv:  &JSONTab{},
+			args: args{
+				str: `"{\"Data\":{\"Device\":{\"DeviceId\":8925},\"StatusCode\":2,\"StatusName\":\"CONFIRMED\"},\"Status\":\"Success\"}"`,
+				ntv: false,
+			},
+			want: `{
+    "Data": {
+        "Device": {
+            "DeviceId": 8925
+        },
+        "StatusCode": 2,
+        "StatusName": "CONFIRMED"
+    },
+    "Status": "Success"
+}`,
+			wantErr: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
