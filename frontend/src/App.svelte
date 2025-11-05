@@ -4,6 +4,7 @@
     import GoStruct from './tabs/GoStruct.svelte';
     import IdTab from './tabs/Id.svelte';
     import PercentTab from './tabs/Percent.svelte';
+    import CryptTab from './tabs/Crypt.svelte';
 
     const svelteToastOptions = {
         duration: 5000,
@@ -61,6 +62,18 @@
                 PERCENT
             </button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button
+                class="nav-link"
+                id="crypt-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#crypt-tab-pane"
+                type="button"
+                role="tab"
+            >
+                CRYPT
+            </button>
+        </li>
     </ul>
     <div class="tab-content mt-3" id="main-menu">
         <div class="tab-pane fade show active" id="json-tab-pane" role="tabpanel" tabindex="0">
@@ -74,6 +87,9 @@
         </div>
         <div class="tab-pane fade" id="percent-tab-pane" role="tabpanel" tabindex="0">
             <PercentTab />
+        </div>
+        <div class="tab-pane fade" id="crypt-tab-pane" role="tabpanel" tabindex="0">
+            <CryptTab />
         </div>
     </div>
 </main>

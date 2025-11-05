@@ -30,6 +30,7 @@ func main() {
 			NewIDTab(),
 			NewPercentTab(),
 			NewGoStructTab(),
+			NewCryptTab(),
 		},
 	}
 	if err := wails.Run(opts); err != nil {
