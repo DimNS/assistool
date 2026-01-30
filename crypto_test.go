@@ -25,7 +25,7 @@ func TestCryptTab_Encrypt(t *testing.T) {
 			message: "Hello, World!",
 			gcm:     false,
 		},
-		}
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := tt.srv.Encrypt("123456789012345678901234", tt.message, tt.gcm)

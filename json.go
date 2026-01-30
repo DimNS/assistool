@@ -25,7 +25,7 @@ func (t *JSONTab) Beautify(jsonString string, ntconvert bool) (string, error) {
 	return res, nil
 }
 
-func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) {
+func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) { //nolint:revive // it's ok
 	str = strings.TrimSpace(str)
 	if str == "" {
 		return "", nil
@@ -53,7 +53,7 @@ func (t *JSONTab) jsonBeautify(str string, ntv bool) (string, error) {
 	return res, nil
 }
 
-func (t *JSONTab) bypassAny(data any) any {
+func (t *JSONTab) bypassAny(data any) any { //nolint:gocognit // it's ok
 	switch v := data.(type) {
 	case map[string]any:
 		return t.bypassMap(v)

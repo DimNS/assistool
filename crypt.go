@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 )
@@ -17,7 +18,7 @@ func NewCryptTab() *CryptTab {
 	return &CryptTab{}
 }
 
-func (t *CryptTab) Encrypt(secretKey string, decryptedString string, withGCM bool) (string, error) {
+func (*CryptTab) Encrypt(secretKey string, decryptedString string, withGCM bool) (string, error) { //nolint:revive // it's ok
 	plainText := []byte(decryptedString)
 
 	block, err := aes.NewCipher([]byte(secretKey))
@@ -57,7 +58,7 @@ func (t *CryptTab) Encrypt(secretKey string, decryptedString string, withGCM boo
 	return base64.RawStdEncoding.EncodeToString(cipherText), err
 }
 
-func (t *CryptTab) Decrypt(secretKey string, encryptedString string, withGCM bool) (string, error) {
+func (*CryptTab) Decrypt(secretKey string, encryptedString string, withGCM bool) (string, error) { //nolint:revive // it's ok
 	cipherText, err := base64.RawStdEncoding.DecodeString(encryptedString)
 	if err != nil {
 		return "", fmt.Errorf("base64 decode: %v", err)
@@ -77,10 +78,10 @@ func (t *CryptTab) Decrypt(secretKey string, encryptedString string, withGCM boo
 		// Extract nonce from the beginning of the ciphertext
 		nonceSize := gcm.NonceSize()
 		if len(cipherText) < nonceSize {
-			return "", fmt.Errorf("ciphertext too short")
+			return "", errors.New("ciphertext too short")
 		}
 
-		nonce, cipherText := cipherText[:nonceSize], cipherText[nonceSize:]
+		nonce, cipherText := cipherText[:nonceSize], cipherText[nonceSize:] //nolint:govet // it's ok
 
 		// Decrypt and verify MAC
 		plainText, err := gcm.Open(nil, nonce, cipherText, nil)
@@ -93,7 +94,7 @@ func (t *CryptTab) Decrypt(secretKey string, encryptedString string, withGCM boo
 
 	// IF the length of the cipherText is less than 16 Bytes:
 	if len(cipherText) < aes.BlockSize {
-		return "", fmt.Errorf("ciphertext block size is too short")
+		return "", errors.New("ciphertext block size is too short")
 	}
 
 	iv := cipherText[:aes.BlockSize]
