@@ -2,10 +2,16 @@ package main
 
 import (
 	"crypto/rand"
+	"fmt"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/oklog/ulid/v2"
+)
+
+const (
+	oneSec = 1000
 )
 
 // IDTab struct.
@@ -46,6 +52,19 @@ func (t *IDTab) GenerateULID(upperCase bool) string { //nolint:revive // it's ok
 	}
 
 	return id
+}
+
+// ExtractTimestampFromULID extracts the timestamp from a ULID.
+func (*IDTab) ExtractTimestampFromULID(id string) string {
+	v, err := ulid.Parse(id)
+	if err != nil {
+		return fmt.Sprintf("Invalid ULID: %v", err)
+	}
+
+	millis := v.Time()
+	tm := time.Unix(int64(millis)/oneSec, (int64(millis)%oneSec)*int64(time.Millisecond)) //nolint:gosec // it's ok
+
+	return tm.UTC().Format("2006-01-02T15:04:05.000Z")
 }
 
 func newUUID() string {

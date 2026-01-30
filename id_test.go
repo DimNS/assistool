@@ -145,3 +145,32 @@ func Test_newULID(t *testing.T) {
 		})
 	}
 }
+
+func TestIDTab_ExtractTimestampFromULID(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		id   string
+		want string
+	}{
+		{
+			name: "success",
+			id:   "01KG78JP4PKG7D8HVSTTBN2TMZ",
+			want: "2026-01-30T10:53:28.086Z",
+		},
+		{
+			name: "Invalid ULID",
+			id:   "01HNVWTNRQWQ8DQFGQ2944YFQ",
+			want: "Invalid ULID: ulid: bad data size when unmarshaling",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got := NewIDTab().ExtractTimestampFromULID(tt.id)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}

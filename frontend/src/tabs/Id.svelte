@@ -1,26 +1,36 @@
 <script>
     import Fa from 'svelte-fa';
-    import {faRotate, faCopy} from '@fortawesome/free-solid-svg-icons';
+    import {faRotate, faCopy, faPersonDigging} from '@fortawesome/free-solid-svg-icons';
     import {onMount} from 'svelte';
     import {toastSuccess} from '../services/Toast';
-    import {GenerateUUID, GenerateULID} from '../../wailsjs/go/main/IDTab';
+    import {GenerateUUID, GenerateULID, ExtractTimestampFromULID} from '../../wailsjs/go/main/IDTab';
 
     let uuid = '';
     let ulid = '';
+    let ulidForTimestamp = '';
+    let ulidTimestamp = '';
     let uuidUpper = true;
     let ulidUpper = true;
 
     onMount(async () => {
-        GenerateUUID(uuidUpper).then((/** @type {string} */ result) => (uuid = result));
-        GenerateULID(ulidUpper).then((/** @type {string} */ result) => (ulid = result));
+        await onGenerateUUID();
+        await onGenerateULID();
+        await onExtractTimestampFromULID();
     });
 
-    function onGenerateUUID() {
-        GenerateUUID(uuidUpper).then((/** @type {string} */ result) => (uuid = result));
+    async function onGenerateUUID() {
+        await GenerateUUID(uuidUpper).then((/** @type {string} */ result) => (uuid = result));
     }
 
-    function onGenerateULID() {
-        GenerateULID(ulidUpper).then((/** @type {string} */ result) => (ulid = result));
+    async function onGenerateULID() {
+        await GenerateULID(ulidUpper).then((/** @type {string} */ result) => (ulid = ulidForTimestamp = result));
+        await onExtractTimestampFromULID();
+    }
+
+    async function onExtractTimestampFromULID() {
+        await ExtractTimestampFromULID(ulidForTimestamp).then(
+            (/** @type {string} */ result) => (ulidTimestamp = result),
+        );
     }
 
     function onCopy(/** @type {string} */ str) {
@@ -66,6 +76,29 @@
             <button type="button" class="btn btn-primary" on:click={onGenerateULID}>
                 <Fa icon={faRotate} />
                 Generate
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- svelte-ignore a11y-label-has-associated-control -->
+<div class="row mt-3">
+    <div class="col">
+        <label class="form-label"><b>Timestamp from UUID</b></label>
+        <p>The time is only defined for version 1, 2, 6 and 7 UUIDs.</p>
+    </div>
+    <div class="col">
+        <label class="form-label"><b>Timestamp from ULID</b></label>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control mono" bind:value={ulidForTimestamp} />
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control mono" bind:value={ulidTimestamp} disabled />
+        </div>
+        <div class="d-grid">
+            <button type="button" class="btn btn-primary" on:click={onExtractTimestampFromULID}>
+                <Fa icon={faPersonDigging} />
+                Extract
             </button>
         </div>
     </div>
