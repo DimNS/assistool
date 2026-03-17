@@ -4,7 +4,6 @@ GOBIN = $(shell pwd)/bin
 .PHONY: deps
 deps:
 	@go mod tidy
-	@go mod vendor
 
 .PHONY: lint
 lint:
