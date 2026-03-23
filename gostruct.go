@@ -110,7 +110,7 @@ func (*GoStructTab) goStructBeautify(input string) (string, error) { //nolint:go
 				return "", fmt.Errorf("write byte: %v", err)
 			}
 
-			if inDateFunction { //nolint:gocritic,nestif // it's ok
+			if inDateFunction { //nolint:gocritic,nestif,revive // it's ok
 				// Для time.Date оставляем запятую с пробелом
 				if err := result.WriteByte(' '); err != nil {
 					return "", fmt.Errorf("write byte: %v", err)
