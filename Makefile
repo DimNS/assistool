@@ -24,5 +24,4 @@ build: deps
 
 .PHONY: tools
 tools: deps
-	@go install github.com/wailsapp/wails/v2/cmd/wails@latest
-	@go install github.com/goreleaser/goreleaser@v1.21.2
+	@go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
