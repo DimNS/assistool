@@ -5,6 +5,7 @@
     import IdTab from './tabs/Id.svelte';
     import PercentTab from './tabs/Percent.svelte';
     import CryptTab from './tabs/Crypt.svelte';
+    import TimeTab from './tabs/Time.svelte';
 
     const svelteToastOptions = {
         duration: 5000,
@@ -74,6 +75,18 @@
                 CRYPT
             </button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button
+                class="nav-link"
+                id="time-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#time-tab-pane"
+                type="button"
+                role="tab"
+            >
+                TIME
+            </button>
+        </li>
     </ul>
     <div class="tab-content mt-3" id="main-menu">
         <div class="tab-pane fade show active" id="json-tab-pane" role="tabpanel" tabindex="0">
@@ -90,6 +103,9 @@
         </div>
         <div class="tab-pane fade" id="crypt-tab-pane" role="tabpanel" tabindex="0">
             <CryptTab />
+        </div>
+        <div class="tab-pane fade" id="time-tab-pane" role="tabpanel" tabindex="0">
+            <TimeTab />
         </div>
     </div>
 </main>
