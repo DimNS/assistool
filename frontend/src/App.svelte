@@ -1,11 +1,13 @@
 <script>
     import {SvelteToast} from '@zerodevx/svelte-toast';
+
     import JsonTab from './tabs/Json.svelte';
     import GoStruct from './tabs/GoStruct.svelte';
     import IdTab from './tabs/Id.svelte';
     import PercentTab from './tabs/Percent.svelte';
     import CryptTab from './tabs/Crypt.svelte';
     import TimeTab from './tabs/Time.svelte';
+    import MD2HTMLTab from './tabs/MD2HTML.svelte';
 
     const svelteToastOptions = {
         duration: 5000,
@@ -78,6 +80,18 @@
         <li class="nav-item" role="presentation">
             <button
                 class="nav-link"
+                id="md2html-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#md2html-tab-pane"
+                type="button"
+                role="tab"
+            >
+                MD2HTML
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button
+                class="nav-link"
                 id="time-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#time-tab-pane"
@@ -103,6 +117,9 @@
         </div>
         <div class="tab-pane fade" id="crypt-tab-pane" role="tabpanel" tabindex="0">
             <CryptTab />
+        </div>
+        <div class="tab-pane fade" id="md2html-tab-pane" role="tabpanel" tabindex="0">
+            <MD2HTMLTab />
         </div>
         <div class="tab-pane fade" id="time-tab-pane" role="tabpanel" tabindex="0">
             <TimeTab />
